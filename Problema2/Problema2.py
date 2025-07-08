@@ -1,6 +1,8 @@
 import os
 import math
 import pandas as pd
+from scipy.stats import t as t_dist
+
 
 ruta = os.path.join(os.path.dirname(__file__), "velocidad_internet_ucu")
 df = pd.read_csv(ruta)
@@ -53,3 +55,13 @@ t = numerador / denominador
 
 print(f"\nEstadístico t: {t:.4f}")
 
+df = ((std_central**2 / n_central + std_semprun**2 / n_semprun)**2) / (
+    ((std_central**2 / n_central)**2) / (n_central - 1) +
+    ((std_semprun**2 / n_semprun)**2) / (n_semprun - 1)
+)
+
+# p-valor (test unilateral a la izquierda)
+p_valor = t_dist.cdf(t, df)
+
+print(f"Grados de libertad: {df:.2f}")
+print(f"p-valor: {p_valor:.5f}")
